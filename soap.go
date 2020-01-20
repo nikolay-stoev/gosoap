@@ -22,7 +22,7 @@ type HeaderParams map[string]interface{}
 type Params map[string]interface{}
 
 // SoapClient return new *Client to handle the requests with the WSDL
-func SoapClient(wsdl string) (*Client, error) {
+func SoapClient(wsdl string, myClient http.Client) (*Client, error) {
 	_, err := url.Parse(wsdl)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func SoapClient(wsdl string) (*Client, error) {
 
 	c := &Client{
 		wsdl:       wsdl,
-		HttpClient: &http.Client{},
+		HttpClient: &myClient,
 	}
 
 	return c, nil
@@ -82,7 +82,7 @@ func (c *Client) waitAndRefreshDefinitions(d time.Duration) {
 }
 
 func (c *Client) initWsdl() {
-	c.Definitions, c.definitionsErr = getWsdlDefinitions(c.wsdl)
+	c.Definitions, c.definitionsErr = getWsdlDefinitions(c.wsdl, c.HttpClient)
 	if c.definitionsErr == nil {
 		c.URL = strings.TrimSuffix(c.Definitions.TargetNamespace, "/")
 	}

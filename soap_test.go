@@ -27,7 +27,7 @@ var (
 
 func TestSoapClient(t *testing.T) {
 	for _, sct := range scts {
-		_, err := SoapClient(sct.URL)
+		_, err := SoapClient(sct.URL, http.Client{})
 		if err != nil && sct.Err {
 			t.Errorf("URL: %s - error: %s", sct.URL, err)
 		}
@@ -77,7 +77,7 @@ var (
 )
 
 func TestClient_Call(t *testing.T) {
-	soap, err := SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
+	soap, err := SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl", http.Client{})
 	if err != nil {
 		t.Errorf("error not expected: %s", err)
 	}
@@ -105,7 +105,7 @@ func TestClient_Call(t *testing.T) {
 		t.Errorf("error: %+v", rv)
 	}
 
-	soap, err = SoapClient("http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL")
+	soap, err = SoapClient("http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso?WSDL", http.Client{})
 	if err != nil {
 		t.Errorf("error not expected: %s", err)
 	}
@@ -121,7 +121,7 @@ func TestClient_Call(t *testing.T) {
 		t.Errorf("error: %+v", rc)
 	}
 
-	soap, err = SoapClient("http://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL")
+	soap, err = SoapClient("http://www.dataaccess.com/webservicesserver/numberconversion.wso?WSDL", http.Client{})
 	if err != nil {
 		t.Errorf("error not expected: %s", err)
 	}
@@ -137,7 +137,7 @@ func TestClient_Call(t *testing.T) {
 		t.Errorf("error: %+v", rn)
 	}
 
-	soap, err = SoapClient("https://domains.livedns.co.il/API/DomainsAPI.asmx?WSDL")
+	soap, err = SoapClient("https://domains.livedns.co.il/API/DomainsAPI.asmx?WSDL", http.Client{})
 	if err != nil {
 		t.Errorf("error not expected: %s", err)
 	}
@@ -168,7 +168,7 @@ func TestClient_Call(t *testing.T) {
 }
 
 func TestClient_CallByStruct(t *testing.T) {
-	soap, err := SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl")
+	soap, err := SoapClient("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl", http.Client{})
 	if err != nil {
 		t.Errorf("error not expected: %s", err)
 	}
@@ -190,7 +190,7 @@ func TestClient_CallByStruct(t *testing.T) {
 }
 
 func TestClient_Call_NonUtf8(t *testing.T) {
-	soap, err := SoapClient("https://demo.ilias.de/webservice/soap/server.php?wsdl")
+	soap, err := SoapClient("https://demo.ilias.de/webservice/soap/server.php?wsdl", http.Client{})
 	if err != nil {
 		t.Errorf("error not expected: %s", err)
 	}
