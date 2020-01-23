@@ -140,6 +140,10 @@ func (c *Client) Do(req *Request) (res *Response, err error) {
 		return nil, err
 	}
 
+	if c.Definitions.Services[0].Ports[0].SoapAddresses[0].Location == "http://tempuri.org" {
+		c.Definitions.Services[0].Ports[0].SoapAddresses[0].Location = "https://stage-flyt.mbplcapis.com:443/cborms/bat-api/AvailabilityProviderService.wsdl"
+	}
+
 	b, err := p.doRequest(c.Definitions.Services[0].Ports[0].SoapAddresses[0].Location)
 	if err != nil {
 		return nil, ErrorWithPayload{err, p.Payload}

@@ -24,7 +24,13 @@ func (c process) MarshalXML(e *xml.Encoder, _ xml.StartElement) error {
 		tokens.endHeader(c.Client.HeaderName)
 	}
 
-	err := tokens.startBody(c.Request.Method, c.Client.Definitions.Types[0].XsdSchema[0].TargetNamespace)
+	var targetNamespace string
+	if len(c.Client.Definitions.Types) == 0 || len(c.Client.Definitions.Types[0].XsdSchema) == 0 || c.Client.Definitions.Types[0].XsdSchema[0].TargetNamespace == "" {
+		targetNamespace = "http://schemas.livebookings.net/OneFormat/Availability/2006/04/"
+	} else {
+		targetNamespace = c.Client.Definitions.Types[0].XsdSchema[0].TargetNamespace
+	}
+	err := tokens.startBody(c.Request.Method, targetNamespace)
 	if err != nil {
 		return err
 	}
