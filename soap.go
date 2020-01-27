@@ -19,7 +19,7 @@ import (
 type HeaderParams map[string]interface{}
 
 // Params type is used to set the params in soap request
-type Params map[string]interface{}
+type Params []byte
 
 // SoapClient return new *Client to handle the requests with the WSDL
 func SoapClient(wsdl string, myClient http.Client) (*Client, error) {
@@ -142,8 +142,8 @@ func (c *Client) Do(req *Request) (res *Response, err error) {
 
 	// --- Hack for CBORMS. Ideally find a better way to include attributes in XML
 	sp := string(p.Payload)
-	if strings.Contains(sp, "<Criteria>") {
-		spc := strings.Replace(sp, "<Criteria>", "<Criteria id=''>", 1)
+	if strings.Contains(sp, `<SearchAvailabilityRequest xmlns="http://schemas.livebookings.net/OneFormat/Availability/2006/04/"></SearchAvailabilityRequest>`) {
+		spc := strings.Replace(sp, `<SearchAvailabilityRequest xmlns="http://schemas.livebookings.net/OneFormat/Availability/2006/04/"></SearchAvailabilityRequest>`, string(p.Request.Params), 1)
 		p.Payload = []byte(spc)
 	}
 	// ---
