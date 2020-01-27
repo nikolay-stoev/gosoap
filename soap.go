@@ -140,6 +140,14 @@ func (c *Client) Do(req *Request) (res *Response, err error) {
 		return nil, err
 	}
 
+	// --- Hack for CBORMS. Ideally find a better way to include attributes in XML
+	sp := string(p.Payload)
+	if strings.Contains(sp, "<Criteria>") {
+		spc := strings.Replace(sp, "<Criteria>", "<Criteria id=''>", 1)
+		p.Payload = []byte(spc)
+	}
+	// ---
+
 	if c.Definitions.Services[0].Ports[0].SoapAddresses[0].Location == "http://tempuri.org" {
 		c.Definitions.Services[0].Ports[0].SoapAddresses[0].Location = "https://stage-flyt.mbplcapis.com:443/cborms/bat-api/AvailabilityProviderService.wsdl"
 	}
